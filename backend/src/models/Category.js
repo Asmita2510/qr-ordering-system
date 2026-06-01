@@ -24,6 +24,11 @@ const Category = sequelize.define(
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
+
+    displayOrder: {
+         type: DataTypes.INTEGER,
+         defaultValue: 0
+    },
   },
   {
     tableName: "categories",

@@ -20,8 +20,15 @@ const SUBSCRIPTION_STATUS = {
   CANCELLED: "CANCELLED",
 };
 
+ const FOOD_TYPES = {
+  VEG: "VEG",
+  NON_VEG: "NON_VEG",
+  VEGAN: "VEGAN",
+}
+
 module.exports = {
   ROLES,
   SUBSCRIPTION_PLANS,
   SUBSCRIPTION_STATUS,
+  FOOD_TYPES,
 };
