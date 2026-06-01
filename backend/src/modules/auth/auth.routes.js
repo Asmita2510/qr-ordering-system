@@ -9,4 +9,9 @@ router.post(
   authController.registerOwner
 );
 
+router.post(
+  "/login",
+  authController.login
+);
+
 module.exports = router;

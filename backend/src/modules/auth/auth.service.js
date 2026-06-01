@@ -95,6 +95,42 @@ const registerOwner = async (data) => {
   }
 };
 
+const login = async ({ email, password }) => {
+  const user = await User.findOne({
+    where: { email },
+  });
+
+  if (!user) {
+    throw new Error("Invalid credentials");
+  }
+
+  const isMatch = await bcrypt.compare(
+    password,
+    user.password
+  );
+
+  if (!isMatch) {
+    throw new Error("Invalid credentials");
+  }
+
+  const token = generateToken({
+    id: user.id,
+    role: user.role,
+    restaurantId: user.restaurantId,
+  });
+
+  return {
+    token,
+    user: {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    },
+  };
+};
+
 module.exports = {
   registerOwner,
+  login,
 };
