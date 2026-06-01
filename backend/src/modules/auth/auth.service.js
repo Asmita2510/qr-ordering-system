@@ -50,6 +50,15 @@ const registerOwner = async (data) => {
       { transaction }
     );
 
+    const defaultCategories = [
+  "Starters",
+  "Main Course",
+  "Desserts",
+  "Breads",
+  "Rice",
+  "Mocktails",
+];
+
     const owner = await User.create(
       {
         name,
@@ -60,6 +69,15 @@ const registerOwner = async (data) => {
       },
       { transaction }
     );
+
+    await Category.bulkCreate(
+  defaultCategories.map((category) => ({
+    name: category,
+    isDefault: true,
+    restaurantId: restaurant.id,
+  })),
+  { transaction }
+);
 
     await Subscription.create(
       {

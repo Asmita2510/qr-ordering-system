@@ -1,6 +1,7 @@
 const User = require("./User");
 const Restaurant = require("./Restaurant");
 const Subscription = require("./Subscription");
+const Category = require("./Category");
 
 Restaurant.hasMany(User, {
   foreignKey: "restaurantId",
@@ -18,8 +19,17 @@ Subscription.belongsTo(Restaurant, {
   foreignKey: "restaurantId",
 });
 
+Restaurant.hasMany(Category, {
+  foreignKey: "restaurantId",
+});
+
+Category.belongsTo(Restaurant, {
+  foreignKey: "restaurantId",
+});
+
 module.exports = {
   User,
   Restaurant,
   Subscription,
+  Category,
 };
