@@ -40,4 +40,35 @@ router.delete(
   menuController.deleteMenuItem
 );
 
+router.post(
+  "/:menuItemId/variants",
+  authMiddleware,
+  menuController.addVariant
+);
+
+router.patch(
+  "/variants/:variantId",
+  authMiddleware,
+  menuController.updateVariant
+);
+
+router.delete(
+  "/variants/:variantId",
+  authMiddleware,
+  menuController.deleteVariant
+);
+
+router.patch(
+  "/:id/availability",
+  authMiddleware,
+  menuController.updateMenuAvailability
+);
+
+router.patch(
+  "/variants/:variantId/availability",
+  authMiddleware,
+  menuController.updateVariantAvailability
+);
+
+
 module.exports = router;

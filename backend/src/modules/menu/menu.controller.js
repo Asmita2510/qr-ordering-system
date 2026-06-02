@@ -115,10 +115,124 @@ const deleteMenuItem = async (
   }
 };
 
+const addVariant = async (req, res) => {
+  try {
+    const variant = await menuService.addVariant(
+      req.params.menuItemId,
+      req.body,
+      req.user.restaurantId
+    );
+
+    return res.status(201).json({
+      success: true,
+      data: variant,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const updateVariant = async (req, res) => {
+  try {
+    const variant = await menuService.updateVariant(
+      req.params.variantId,
+      req.body,
+      req.user.restaurantId
+    );
+
+    return res.status(200).json({
+      success: true,
+      data: variant,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const deleteVariant = async (req, res) => {
+  try {
+    await menuService.deleteVariant(
+      req.params.variantId,
+      req.user.restaurantId
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "Variant deleted successfully",
+    });
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const updateMenuAvailability = async (
+  req,
+  res
+) => {
+  try {
+    const menuItem =
+      await menuService.updateMenuAvailability(
+        req.params.id,
+        req.body.isAvailable,
+        req.user.restaurantId
+      );
+
+    return res.status(200).json({
+      success: true,
+      data: menuItem,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const updateVariantAvailability = async (
+  req,
+  res
+) => {
+  try {
+    const variant =
+      await menuService.updateVariantAvailability(
+        req.params.variantId,
+        req.body.isAvailable,
+        req.user.restaurantId
+      );
+
+    return res.status(200).json({
+      success: true,
+      data: variant,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   createMenuItem,
   getMenuItems,
   getMenuItemById,
   updateMenuItem,
   deleteMenuItem,
+
+  addVariant,
+  updateVariant,
+  deleteVariant,
+
+  updateMenuAvailability,
+  updateVariantAvailability,
 };

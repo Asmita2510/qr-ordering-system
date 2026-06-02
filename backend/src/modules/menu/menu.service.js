@@ -227,10 +227,184 @@ const deleteMenuItem = async (
   return true;
 };
 
+const addVariant = async (
+  menuItemId,
+  data,
+  restaurantId
+) => {
+  const menuItem = await MenuItem.findOne({
+    where: {
+      id: menuItemId,
+      restaurantId,
+    },
+  });
+
+  if (!menuItem) {
+    throw new Error("Menu item not found");
+  }
+
+  const existingVariant =
+    await MenuItemVariant.findOne({
+      where: {
+        menuItemId,
+        name: data.name,
+      },
+    });
+
+  if (existingVariant) {
+    throw new Error(
+      "Variant already exists"
+    );
+  }
+
+  return await MenuItemVariant.create({
+    menuItemId,
+    name: data.name,
+    price: data.price,
+  });
+};
+
+const updateVariant = async (
+  variantId,
+  data,
+  restaurantId
+) => {
+  const variant =
+    await MenuItemVariant.findOne({
+      where: {
+        id: variantId,
+      },
+      include: [
+        {
+          model: MenuItem,
+          where: {
+            restaurantId,
+          },
+        },
+      ],
+    });
+
+  if (!variant) {
+    throw new Error(
+      "Variant not found"
+    );
+  }
+
+  await variant.update({
+    name:
+      data.name ??
+      variant.name,
+
+    price:
+      data.price ??
+      variant.price,
+  });
+
+  return variant;
+};
+
+const deleteVariant = async (
+  variantId,
+  restaurantId
+) => {
+  const variant =
+    await MenuItemVariant.findOne({
+      where: {
+        id: variantId,
+      },
+      include: [
+        {
+          model: MenuItem,
+          where: {
+            restaurantId,
+          },
+        },
+      ],
+    });
+
+  if (!variant) {
+    throw new Error(
+      "Variant not found"
+    );
+  }
+
+  await variant.destroy();
+
+  return true;
+};
+
+const updateMenuAvailability = async (
+    menuItemId,
+    isAvailable,
+    restaurantId
+  ) => {
+    const menuItem =
+      await MenuItem.findOne({
+        where: {
+          id: menuItemId,
+          restaurantId,
+        },
+      });
+
+    if (!menuItem) {
+      throw new Error(
+        "Menu item not found"
+      );
+    }
+
+    menuItem.isAvailable =
+      isAvailable;
+
+    await menuItem.save();
+
+    return menuItem;
+  };
+
+const updateVariantAvailability = async (
+    variantId,
+    isAvailable,
+    restaurantId
+  ) => {
+    const variant =
+      await MenuItemVariant.findOne({
+        where: {
+          id: variantId,
+        },
+        include: [
+          {
+            model: MenuItem,
+            where: {
+              restaurantId,
+            },
+          },
+        ],
+      });
+
+    if (!variant) {
+      throw new Error(
+        "Variant not found"
+      );
+    }
+
+    variant.isAvailable =
+      isAvailable;
+
+    await variant.save();
+
+    return variant;
+  };
+
 module.exports = {
   createMenuItem,
   getMenuItems,
   getMenuItemById,
   updateMenuItem,
   deleteMenuItem,
+
+  addVariant,
+  updateVariant,
+  deleteVariant,
+
+  updateMenuAvailability,
+  updateVariantAvailability,
 };
