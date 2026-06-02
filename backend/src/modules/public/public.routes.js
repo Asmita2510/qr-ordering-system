@@ -18,4 +18,14 @@ router.post(
   publicController.placeOrder
 );
 
+router.get(
+  "/session/:sessionId/orders",
+  publicController.getSessionOrders
+);
+
+router.post(
+  "/request-bill",
+  publicController.requestBill
+);
+
 module.exports = router;

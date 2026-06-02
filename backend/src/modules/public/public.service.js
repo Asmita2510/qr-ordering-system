@@ -258,7 +258,77 @@ if (
   }
 };
 
+const getSessionOrders = async (
+  sessionId
+) => {
+  const session =
+    await DiningSession.findByPk(
+      sessionId
+    );
+
+  if (!session) {
+    throw new Error(
+      "Session not found"
+    );
+  }
+
+  return await Order.findAll({
+    where: {
+      sessionId,
+    },
+
+    include: [
+      {
+        model: OrderItem,
+
+        include: [
+          {
+            model: MenuItem,
+          },
+
+          {
+            model:
+              MenuItemVariant,
+          },
+        ],
+      },
+    ],
+
+    order: [
+      ["createdAt", "DESC"],
+    ],
+  });
+};
+
+const requestBill = async (
+  sessionId
+) => {
+  const session =
+    await DiningSession.findOne({
+      where: {
+        id: sessionId,
+        status: "ACTIVE",
+      },
+    });
+
+  if (!session) {
+    throw new Error(
+      "Session not found"
+    );
+  }
+
+  session.billRequested = true;
+
+  await session.save();
+
+  return session;
+};
+
+
+
 module.exports = {
   getTableSessionAndMenu,
   placeOrder,
+  getSessionOrders,
+  requestBill,
 };

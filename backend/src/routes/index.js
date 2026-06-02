@@ -16,6 +16,14 @@ const tableRoutes = require(
 const publicRoutes = require(
   "../modules/public/public.routes"
 );
+const orderRoutes = require(
+  "../modules/order/order.routes"
+);
+
+router.use(
+  "/orders",
+  orderRoutes
+);
 
 router.use(
   "/tables",
