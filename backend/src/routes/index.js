@@ -10,7 +10,14 @@ const menuRoutes = require(
   "../modules/menu/menu.routes"
 );
 const categoryRoutes = require("../modules/category/category.routes");
+const tableRoutes = require(
+  "../modules/table/table.routes"
+);
 
+router.use(
+  "/tables",
+  tableRoutes
+);
 router.use("/auth", authRoutes);
 router.use("/categories",categoryRoutes);
 router.use("/menu", menuRoutes);
