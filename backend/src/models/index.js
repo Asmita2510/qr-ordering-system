@@ -6,6 +6,11 @@ const MenuItem = require("./MenuItem");
 const MenuItemVariant =
   require("./MenuItemVariant");
 const Table = require("./Table");
+const DiningSession = require(
+  "./DiningSession"
+);
+const Order = require("./Order");
+const OrderItem = require("./OrderItem");
 
 Restaurant.hasMany(User, {
   foreignKey: "restaurantId",
@@ -69,6 +74,76 @@ Table.belongsTo(Restaurant, {
   foreignKey: "restaurantId",
 });
 
+Table.hasMany(
+  DiningSession,
+  {
+    foreignKey: "tableId",
+  }
+);
+
+DiningSession.belongsTo(
+  Table,
+  {
+    foreignKey: "tableId",
+  }
+);
+
+Restaurant.hasMany(
+  DiningSession,
+  {
+    foreignKey:
+      "restaurantId",
+  }
+);
+
+DiningSession.belongsTo(
+  Restaurant,
+  {
+    foreignKey:
+      "restaurantId",
+  }
+);
+
+Order.hasMany(OrderItem, {
+  foreignKey: "orderId",
+});
+
+OrderItem.belongsTo(Order, {
+  foreignKey: "orderId",
+});
+
+Table.hasMany(Order, {
+  foreignKey: "tableId",
+});
+
+Order.belongsTo(Table, {
+  foreignKey: "tableId",
+});
+
+Restaurant.hasMany(Order, {
+  foreignKey: "restaurantId",
+});
+
+Order.belongsTo(Restaurant, {
+  foreignKey: "restaurantId",
+});
+
+MenuItem.hasMany(OrderItem, {
+  foreignKey: "menuItemId",
+});
+
+OrderItem.belongsTo(MenuItem, {
+  foreignKey: "menuItemId",
+});
+
+MenuItemVariant.hasMany(OrderItem, {
+  foreignKey: "variantId",
+});
+
+OrderItem.belongsTo(MenuItemVariant, {
+  foreignKey: "variantId",
+});
+
 module.exports = {
   User,
   Restaurant,
@@ -77,4 +152,7 @@ module.exports = {
   MenuItem,
   MenuItemVariant,
   Table,
+  DiningSession,
+  Order,
+  OrderItem,
 };

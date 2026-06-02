@@ -44,6 +44,10 @@ const Table = sequelize.define(
     qrCode: {
       type: DataTypes.STRING,
     },
+    qrToken: {
+  type: DataTypes.STRING,
+  unique: true,
+},
   },
   {
     tableName: "tables",

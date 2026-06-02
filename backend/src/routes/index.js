@@ -13,6 +13,9 @@ const categoryRoutes = require("../modules/category/category.routes");
 const tableRoutes = require(
   "../modules/table/table.routes"
 );
+const publicRoutes = require(
+  "../modules/public/public.routes"
+);
 
 router.use(
   "/tables",
@@ -21,5 +24,9 @@ router.use(
 router.use("/auth", authRoutes);
 router.use("/categories",categoryRoutes);
 router.use("/menu", menuRoutes);
+router.use(
+  "/public",
+  publicRoutes
+);
 
 module.exports = router;

@@ -1,4 +1,7 @@
 const { Table } = require("../../models");
+const generateQrToken = require(
+  "../../utils/generateQrToken"
+);
 
 const createTable = async (
   data,
@@ -25,6 +28,8 @@ const createTable = async (
       data.tableNumber,
     capacity:
       data.capacity || 4,
+     qrToken:
+    generateQrToken(),
   });
 };
 
