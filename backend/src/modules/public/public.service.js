@@ -10,7 +10,9 @@ const {
 } = require("../../models");
 
 const sequelize = require("../../config/db");
-
+const {
+  getIO,
+} = require("../../socket/socket");
 const getTableSessionAndMenu = async (
   qrToken
 ) => {
@@ -247,6 +249,21 @@ if (
     }
 
     await transaction.commit();
+
+    getIO()
+  .to(
+    `restaurant_${session.restaurantId}`
+  )
+  .emit(
+    "NEW_ORDER",
+    {
+      orderId: order.id,
+      tableId:
+        session.tableId,
+      sessionId:
+        session.id,
+    }
+  );
 
     return {
       order,

@@ -4,6 +4,7 @@ const app = require("./app");
 const sequelize = require("./config/db");
 
 const PORT = process.env.PORT || 5000;
+const http = require("http");
 
 async function startServer() {
   try {
@@ -17,9 +18,23 @@ async function startServer() {
 
     console.log("Models Synced");
 
-    app.listen(PORT, () => {
-      console.log(`Server running on ${PORT}`);
-    });
+    const server =
+  http.createServer(app);
+
+const {
+  initializeSocket,
+} = require("./socket/socket");
+
+initializeSocket(server);
+
+server.listen(PORT, () => {
+  console.log(
+    `Server running on port ${PORT}`
+  );
+});
+    // app.listen(PORT, () => {
+    //   console.log(`Server running on ${PORT}`);
+    // });
   } catch (error) {
     console.log(error);
   }
