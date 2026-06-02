@@ -1,43 +1,129 @@
 const {
   MenuItem,
+  MenuItemVariant,
   Category,
 } = require("../../models");
+const sequelize = require("../../config/db");
+// const createMenuItem = async (
+//   data,
+//   restaurantId
+// ) => {
+//   const {
+//     categoryId,
+//     name,
+//     description,
+//     price,
+//     foodType,
+//   } = data;
+
+//   const category = await Category.findOne({
+//     where: {
+//       id: categoryId,
+//       restaurantId,
+//     },
+//   });
+
+//   if (!category) {
+//     throw new Error(
+//       "Category not found"
+//     );
+//   }
+
+//   const menuItem = await MenuItem.create({
+//     restaurantId,
+//     categoryId,
+//     name,
+//     description,
+//     price,
+//     foodType,
+//   });
+
+//   return menuItem;
+// };
 
 const createMenuItem = async (
   data,
   restaurantId
 ) => {
-  const {
-    categoryId,
-    name,
-    description,
-    price,
-    foodType,
-  } = data;
+  const transaction =
+    await sequelize.transaction();
 
-  const category = await Category.findOne({
+  try {
+    const {
+      categoryId,
+      name,
+      description,
+      foodType,
+      variants,
+    } = data;
+
+    const category =
+      await Category.findOne({
+        where: {
+          id: categoryId,
+          restaurantId,
+        },
+      });
+
+    if (!category) {
+      throw new Error(
+        "Category not found"
+      );
+    }
+
+    const existingMenuItem =
+  await MenuItem.findOne({
     where: {
-      id: categoryId,
       restaurantId,
+      categoryId,
+      name,
     },
   });
 
-  if (!category) {
-    throw new Error(
-      "Category not found"
-    );
+if (existingMenuItem) {
+  throw new Error(
+    "Menu item already exists"
+  );
+}
+
+    const menuItem =
+      await MenuItem.create(
+        {
+          restaurantId,
+          categoryId,
+          name,
+          description,
+          foodType,
+        },
+        { transaction }
+      );
+
+    if (
+      variants &&
+      variants.length
+    ) {
+      await MenuItemVariant.bulkCreate(
+        variants.map(
+          (variant) => ({
+            menuItemId:
+              menuItem.id,
+            name:
+              variant.name,
+            price:
+              variant.price,
+          })
+        ),
+        { transaction }
+      );
+    }
+
+    await transaction.commit();
+
+    return menuItem;
+  } catch (error) {
+    await transaction.rollback();
+    throw error;
   }
-
-  const menuItem = await MenuItem.create({
-    restaurantId,
-    categoryId,
-    name,
-    description,
-    price,
-    foodType,
-  });
-
-  return menuItem;
 };
 
 const getMenuItems = async (
@@ -48,14 +134,17 @@ const getMenuItems = async (
       restaurantId,
     },
     include: [
-      {
-        model: Category,
-        attributes: [
-          "id",
-          "name",
-        ],
-      },
+  {
+    model: Category,
+    attributes: [
+      "id",
+      "name",
     ],
+  },
+  {
+    model: MenuItemVariant,
+  },
+]
   });
 };
 
