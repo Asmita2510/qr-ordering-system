@@ -54,8 +54,18 @@ const createMenuItem = async (
       name,
       description,
       foodType,
+      price,
       variants,
     } = data;
+
+    if (
+  (!variants || variants.length === 0) &&
+  !price
+) {
+  throw new Error(
+    "Price is required when no variants exist"
+  );
+}
 
     const category =
       await Category.findOne({
@@ -94,6 +104,9 @@ if (existingMenuItem) {
           name,
           description,
           foodType,
+          price: variants?.length
+      ? null
+      : price,
         },
         { transaction }
       );

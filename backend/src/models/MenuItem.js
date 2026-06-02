@@ -27,10 +27,10 @@ const MenuItem = sequelize.define(
 
     description: DataTypes.TEXT,
 
-    // price: {
-    //   type: DataTypes.DECIMAL(10, 2),
-    //   allowNull: true,
-    // },
+    price: {
+      type: DataTypes.DECIMAL(10, 2),
+      allowNull: true,
+    },
 
     foodType: {
       type: DataTypes.ENUM(
