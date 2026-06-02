@@ -148,7 +148,89 @@ const getMenuItems = async (
   });
 };
 
+const getMenuItemById = async (
+  menuItemId,
+  restaurantId
+) => {
+  const menuItem = await MenuItem.findOne({
+    where: {
+      id: menuItemId,
+      restaurantId,
+    },
+    include: [
+      {
+        model: Category,
+        attributes: ["id", "name"],
+      },
+      {
+        model: MenuItemVariant,
+      },
+    ],
+  });
+
+  if (!menuItem) {
+    throw new Error("Menu item not found");
+  }
+
+  return menuItem;
+};
+
+const updateMenuItem = async (
+  menuItemId,
+  data,
+  restaurantId
+) => {
+  const menuItem = await MenuItem.findOne({
+    where: {
+      id: menuItemId,
+      restaurantId,
+    },
+  });
+
+  if (!menuItem) {
+    throw new Error("Menu item not found");
+  }
+
+  await menuItem.update({
+    name: data.name ?? menuItem.name,
+    description:
+      data.description ??
+      menuItem.description,
+    foodType:
+      data.foodType ??
+      menuItem.foodType,
+    categoryId:
+      data.categoryId ??
+      menuItem.categoryId,
+  });
+
+  return menuItem;
+};
+
+const deleteMenuItem = async (
+  menuItemId,
+  restaurantId
+) => {
+  const menuItem = await MenuItem.findOne({
+    where: {
+      id: menuItemId,
+      restaurantId,
+    },
+  });
+
+  if (!menuItem) {
+    throw new Error("Menu item not found");
+  }
+
+  await menuItem.destroy();
+
+  return true;
+};
+
 module.exports = {
   createMenuItem,
   getMenuItems,
+  getMenuItemById,
+  updateMenuItem,
+  deleteMenuItem,
 };
