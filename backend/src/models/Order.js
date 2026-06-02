@@ -35,6 +35,9 @@ const Order = sequelize.define(
       ),
       defaultValue: "PLACED",
     },
+    orderNumber: {
+  type: DataTypes.INTEGER,
+},
   },
   {
     tableName: "orders",

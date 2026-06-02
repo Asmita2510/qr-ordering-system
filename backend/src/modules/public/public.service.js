@@ -131,6 +131,28 @@ const placeOrder = async (
       );
     }
 
+    const lastOrder =
+  await Order.findOne({
+    where: {
+      restaurantId:
+        session.restaurantId,
+    },
+
+    order: [
+      ["orderNumber", "DESC"],
+    ],
+  });
+
+//   console.log("last order",lastOrder)
+
+const nextOrderNumber =
+  lastOrder
+    ? lastOrder.orderNumber + 1
+    : 1;
+
+    console.log("LAST ORDER:", lastOrder?.orderNumber);
+console.log("NEXT ORDER:", nextOrderNumber);
+
     const order =
       await Order.create(
         {
@@ -142,6 +164,9 @@ const placeOrder = async (
 
           sessionId:
             session.id,
+
+          orderNumber:
+      nextOrderNumber,
 
           status: "PLACED",
         },
@@ -250,6 +275,10 @@ if (
 
     await transaction.commit();
 
+    const table = await Table.findByPk(
+  session.tableId
+);
+
     getIO()
   .to(
     `restaurant_${session.restaurantId}`
@@ -258,8 +287,10 @@ if (
     "NEW_ORDER",
     {
       orderId: order.id,
-      tableId:
-        session.tableId,
+      orderNumber: order.orderNumber,
+      tableNumber:
+        table.tableNumber,
+        status:order.status,
       sessionId:
         session.id,
     }
@@ -270,9 +301,12 @@ if (
       orderItems,
     };
   } catch (error) {
+  if (!transaction.finished) {
     await transaction.rollback();
-    throw error;
   }
+
+  throw error;
+}
 };
 
 const getSessionOrders = async (
@@ -312,7 +346,7 @@ const getSessionOrders = async (
     ],
 
     order: [
-      ["createdAt", "DESC"],
+      ["orderNumber", "DESC"],
     ],
   });
 };

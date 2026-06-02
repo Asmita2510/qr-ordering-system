@@ -3,19 +3,19 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.addColumn(
-      "dining_sessions",
-      "billRequested",
+      "orders",
+      "orderNumber",
       {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false,
+        type: Sequelize.INTEGER,
+        allowNull: true,
       }
     );
   },
 
   async down(queryInterface) {
     await queryInterface.removeColumn(
-      "dining_sessions",
-      "billRequested"
+      "orders",
+      "orderNumber"
     );
   },
 };
