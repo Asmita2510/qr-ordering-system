@@ -86,6 +86,8 @@ const getOrderById = async (
   return order;
 };
 
+const {getIO} = require("../../socket/socket")
+
 const updateOrderStatus =
   async (
     orderId,
@@ -128,6 +130,21 @@ const updateOrderStatus =
     order.status = status;
 
     await order.save();
+
+    getIO()
+  .to(
+    `session_${order.sessionId}`
+  )
+  .emit(
+    "ORDER_STATUS_UPDATED",
+    {
+      orderId: order.id,
+      orderNumber:
+        order.orderNumber,
+      status:
+        order.status,
+    }
+  );
 
     return order;
   };

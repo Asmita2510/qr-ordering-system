@@ -32,6 +32,19 @@ const initializeSocket = (
       );
 
       socket.on(
+  "join_session",
+  (sessionId) => {
+    socket.join(
+      `session_${sessionId}`
+    );
+
+    console.log(
+      `Joined session_${sessionId}`
+    );
+  }
+);
+
+      socket.on(
   "join_restaurant",
   (restaurantId) => {
     socket.join(
