@@ -28,4 +28,9 @@ router.post(
   publicController.requestBill
 );
 
+router.get(
+  "/session/:sessionId/bill",
+  publicController.getBill
+);
+
 module.exports = router;

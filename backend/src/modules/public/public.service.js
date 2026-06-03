@@ -375,6 +375,68 @@ const requestBill = async (
   return session;
 };
 
+const getBill = async (
+  sessionId
+) => {
+  const session =
+    await DiningSession.findByPk(
+      sessionId
+    );
+
+  if (!session) {
+    throw new Error(
+      "Session not found"
+    );
+  }
+
+  const orders =
+    await Order.findAll({
+      where: {
+        sessionId,
+        status: [
+          "PLACED",
+          "PREPARING",
+          "READY",
+          "SERVED",
+        ],
+      },
+
+      include: [
+        {
+          model: OrderItem,
+        },
+      ],
+    });
+
+  let subtotal = 0;
+
+  orders.forEach((order) => {
+    order.OrderItems.forEach(
+      (item) => {
+        subtotal += Number(
+          item.totalPrice
+        );
+      }
+    );
+  });
+
+  const gst =
+    subtotal * 0.05;
+
+  const serviceCharge = 0;
+
+  const total =
+    subtotal +
+    gst +
+    serviceCharge;
+
+  return {
+    subtotal,
+    gst,
+    serviceCharge,
+    total,
+  };
+};
 
 
 module.exports = {
@@ -382,4 +444,5 @@ module.exports = {
   placeOrder,
   getSessionOrders,
   requestBill,
+  getBill,
 };

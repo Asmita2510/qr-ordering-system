@@ -18,6 +18,12 @@ router.get(
 );
 
 router.get(
+  "/bill-requests",
+  authMiddleware,
+  orderController.getBillRequests
+);
+
+router.get(
   "/:id",
   authMiddleware,
   orderController.getOrderById
@@ -34,5 +40,7 @@ router.patch(
   authMiddleware,
   orderController.completeSession
 );
+
+
 
 module.exports = router;

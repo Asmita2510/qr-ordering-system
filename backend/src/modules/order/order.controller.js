@@ -96,9 +96,32 @@ const completeSession =
     }
   };
 
+  const getBillRequests =
+  async (req, res) => {
+    try {
+      const sessions =
+        await orderService.getBillRequests(
+          req.user
+            .restaurantId
+        );
+
+      return res.status(200).json({
+        success: true,
+        data: sessions,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message:
+          error.message,
+      });
+    }
+  };
+
 module.exports = {
   getOrders,
   getOrderById,
   updateOrderStatus,
   completeSession,
+  getBillRequests,
 };

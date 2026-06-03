@@ -178,6 +178,8 @@ const completeSession =
     session.completedAt =
       new Date();
 
+    session.billRequested = false;
+      
     await session.save();
 
     await session.Table.update(
@@ -190,9 +192,29 @@ const completeSession =
     return session;
   };
 
+const getBillRequests =
+  async (
+    restaurantId
+  ) => {
+    return await DiningSession.findAll(
+      {
+        where: {
+          restaurantId,
+          billRequested:
+            true,
+          status:
+            "ACTIVE",
+        },
+
+        include: [Table],
+      }
+    );
+  };
+
 module.exports = {
   getOrders,
   getOrderById,
   updateOrderStatus,
   completeSession,
+  getBillRequests,
 };

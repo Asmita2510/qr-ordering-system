@@ -93,9 +93,33 @@ const requestBill = async (
   }
 };
 
+const getBill = async (
+  req,
+  res
+) => {
+  try {
+    const bill =
+      await publicService.getBill(
+        req.params.sessionId
+      );
+
+    return res.status(200).json({
+      success: true,
+      data: bill,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      message:
+        error.message,
+    });
+  }
+};
+
 module.exports = {
   getTableSessionAndMenu,
   placeOrder,
   getSessionOrders,
-  requestBill
+  requestBill,
+  getBill,
 };
