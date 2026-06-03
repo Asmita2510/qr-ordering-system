@@ -2,6 +2,7 @@ const { Table } = require("../../models");
 const generateQrToken = require(
   "../../utils/generateQrToken"
 );
+const generateQRCode = require("../../utils/genereateQRCode");
 
 const createTable = async (
   data,
@@ -22,6 +23,8 @@ const createTable = async (
     );
   }
 
+  const qrToken = generateQrToken();
+
   return await Table.create({
     restaurantId,
     tableNumber:
@@ -29,7 +32,8 @@ const createTable = async (
     capacity:
       data.capacity || 4,
      qrToken:
-    generateQrToken(),
+    qrToken,
+    qrCode : await generateQRCode(qrToken),
   });
 };
 
