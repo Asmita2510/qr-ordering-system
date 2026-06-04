@@ -9,6 +9,10 @@ const authMiddleware = require(
 const menuController = require(
   "./menu.controller"
 );
+const upload =
+  require(
+    "../../middleware/uploadMiddleware"
+  );
 
 router.post(
   "/",
@@ -62,6 +66,13 @@ router.patch(
   "/:id/availability",
   authMiddleware,
   menuController.updateMenuAvailability
+);
+
+router.post(
+  "/:id/image",
+  authMiddleware,
+  upload.single("image"),
+  menuController.uploadImage
 );
 
 router.patch(

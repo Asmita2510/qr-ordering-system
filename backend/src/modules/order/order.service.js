@@ -143,6 +143,8 @@ const updateOrderStatus =
         order.orderNumber,
       status:
         order.status,
+      tableId:order.tableId,
+      updatedAt:order.updatedAt,
     }
   );
 

@@ -495,6 +495,34 @@ const updateVariantAvailability = async (
 //     return variant;
 //   };
 
+const uploadMenuItemImage =
+  async (
+    menuItemId,
+    imagePath,
+    restaurantId
+  ) => {
+    const menuItem =
+      await MenuItem.findOne({
+        where: {
+          id: menuItemId,
+          restaurantId,
+        },
+      });
+
+    if (!menuItem) {
+      throw new Error(
+        "Menu item not found"
+      );
+    }
+
+    menuItem.image =
+      imagePath;
+
+    await menuItem.save();
+
+    return menuItem;
+  };
+
 module.exports = {
   createMenuItem,
   getMenuItems,
@@ -508,4 +536,6 @@ module.exports = {
 
   updateMenuAvailability,
   updateVariantAvailability,
+
+  uploadMenuItemImage,
 };

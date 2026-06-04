@@ -222,6 +222,43 @@ const updateVariantAvailability = async (
   }
 };
 
+const uploadImage =
+  async (req, res) => {
+    try {
+      if (!req.file) {
+        return res
+          .status(400)
+          .json({
+            success: false,
+            message:
+              "Image is required",
+          });
+      }
+
+      const imagePath =
+        `/uploads/menu-items/${req.file.filename}`;
+
+      const menuItem =
+        await menuService.uploadMenuItemImage(
+          req.params.id,
+          imagePath,
+          req.user
+            .restaurantId
+        );
+
+      return res.status(200).json({
+        success: true,
+        data: menuItem,
+      });
+    } catch (error) {
+      return res.status(400).json({
+        success: false,
+        message:
+          error.message,
+      });
+    }
+  };
+
 module.exports = {
   createMenuItem,
   getMenuItems,
@@ -235,4 +272,6 @@ module.exports = {
 
   updateMenuAvailability,
   updateVariantAvailability,
+
+  uploadImage,
 };
