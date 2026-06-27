@@ -1,9 +1,5 @@
 import React from 'react';
-import { SafeAreaView, View } from 'react-native';
-// import Button from './components/Button';
-import Button from '@components/Button';
-
-import { SPACING } from './constants/spacing';
+import { SafeAreaView, Text } from 'react-native';
 
 export default function App() {
   return (
@@ -11,32 +7,9 @@ export default function App() {
       style={{
         flex: 1,
         justifyContent: 'center',
-        padding: SPACING.lg,
+        alignItems: 'center',
       }}>
-      <View
-        style={{
-          gap: SPACING.md,
-        }}>
-        <Button
-          title="Primary Button"
-          onPress={() => console.log('Pressed')}
-        />
-
-        <Button
-          title="Secondary Button"
-          type="secondary"
-        />
-
-        <Button
-          title="Loading"
-          loading
-        />
-
-        <Button
-          title="Disabled"
-          disabled
-        />
-      </View>
+      <Text>Hello DineFlow 🚀</Text>
     </SafeAreaView>
   );
 }
