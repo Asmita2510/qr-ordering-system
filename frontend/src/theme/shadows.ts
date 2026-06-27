@@ -1,25 +1,25 @@
-export const SHADOWS = {
+import { ViewStyle } from 'react-native';
+
+export const SHADOWS: Record<string, ViewStyle> = {
   card: {
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
     },
     shadowOpacity: 0.08,
     shadowRadius: 4,
-
     elevation: 3,
   },
 
   button: {
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
     },
     shadowOpacity: 0.12,
     shadowRadius: 5,
-
     elevation: 4,
   },
 };

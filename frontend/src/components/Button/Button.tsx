@@ -7,7 +7,7 @@ import {
 
 import styles from './styles';
 import { ButtonProps } from './types';
-import { COLORS } from '@constants/colors';
+import { COLORS } from '@theme/colors';
 
 const Button = ({
   title,

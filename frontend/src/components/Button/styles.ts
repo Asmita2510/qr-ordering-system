@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
-import { COLORS } from '@constants/colors';
-import { SPACING } from '@constants/spacing';
-import { RADIUS } from '@constants/radius';
+import { COLORS } from '@theme/colors';
+import { SPACING } from '@theme/spacing';
+import { RADIUS } from '@theme/radius';
 
 const styles = StyleSheet.create({
   button: {
